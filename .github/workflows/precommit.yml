@@ -21,6 +21,13 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          set -x
+          perl --version
+          cpanm Perl::Critic
+          cpanm Perl::Tidy
+          cpanm App::perlimports
       - uses: pre-commit/action@v3.0.1
         with:
           extra_args: --all-files --show-diff-on-failure
