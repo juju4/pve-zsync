@@ -1249,7 +1249,7 @@ $PROGNAME sync --dest <string> --source <string> [OPTIONS]\n
 
 	--name      string
 		The name of the sync job, if not set it is 'default'.
-		It is only necessary if scheduler allready contains this source.
+		It is only necessary if scheduler already contains this source.
 
 	--prepend-storage-id
 		If specified, prepend the storage ID to the destination's path(s).

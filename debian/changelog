@@ -124,7 +124,7 @@ pve-zsync (1.6-15) unstable; urgency=medium
 
   * fix check for cdrom drives
 
-  * make scp commands ipv6 comaptible
+  * make scp commands ipv6 compatible
 
  -- Proxmox Support Team <support@proxmox.com>  Fri, 07 Jul 2017 09:43:01 +0200
 
@@ -201,7 +201,7 @@ pve-zsync (1.6-5) unstable; urgency=medium
 
 pve-zsync (1.6-4) unstable; urgency=medium
 
-  * improve reliability and recover chnged snapshots on source
+  * improve reliability and recover changed snapshots on source
 
   * improve vm_exist: check both lxc and qemu and return the type of the VM
 
