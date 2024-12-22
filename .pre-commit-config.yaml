@@ -32,5 +32,8 @@ repos:
     rev: v0.0.5
     hooks:
       - id: perlcritic
+        files: 'pve-zsync'
       - id: perltidy
+        files: 'pve-zsync'
       - id: perlimports
+        files: 'pve-zsync'
