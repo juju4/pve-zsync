@@ -7,6 +7,7 @@ use Fcntl qw(:flock SEEK_END);
 use Getopt::Long qw(GetOptionsFromArray);
 use File::Path qw(make_path);
 use JSON;
+use IPC::Open3;
 use IO::File;
 use String::ShellQuote 'shell_quote';
 use Text::ParseWords;
@@ -859,18 +860,32 @@ sub get_disks {
 }
 
 sub run_cmd {
+    local *CATCHERR = IO::File->new_tmpfile;
+    my $cmd_pid;
+    my $cmd_in = '';
+    my $output = '';
+    my $output_err = '';
+
     my ($cmd) = @_;
     print "Start CMD\n" if $DEBUG;
     print Dumper $cmd if $DEBUG;
     if (ref($cmd) eq 'ARRAY') {
 	$cmd = join(' ', map { ref($_) ? $$_ : shell_quote($_) } @$cmd);
     }
-    my $output = `$cmd 2>&1`;
+    $cmd_pid = open3($cmd_in, \*CATCHOUT, ">&CATCHERR", $cmd);
+    waitpid($cmd_pid, 0);
+    while(<CATCHOUT>) {
+        $output .= $_
+    }
+    while(<CATCHERR>) {
+        $output_err .= $_
+    }
 
-    die "COMMAND:\n\t$cmd\nGET ERROR:\n\t$output" if 0 != $?;
+    die "COMMAND:\n\t$cmd\nGET STDOUT:\n\t$output\nGET STDERR:\n\t$output_err" if 0 != $?;
 
     chomp($output);
     print Dumper $output if $DEBUG;
+    print Dumper $output_err if $DEBUG;
     print "END CMD\n" if $DEBUG;
     return $output;
 }
@@ -919,6 +934,8 @@ sub parse_disks {
 	die "Get no path from pvesm path $stor:$disk\n" if !$path;
 
 	$disks->{$num}->{storage_id} = $stor;
+
+	print Dumper $path if $DEBUG;
 
 	if ($vm_type eq 'qemu' && $path =~ m/^\/dev\/zvol\/(\w+.*)(\/$disk)$/) {
 
