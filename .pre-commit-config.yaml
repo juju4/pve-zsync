@@ -35,5 +35,3 @@ repos:
         files: 'pve-zsync'
       - id: perltidy
         files: 'pve-zsync'
-      - id: perlimports
-        files: 'pve-zsync'
